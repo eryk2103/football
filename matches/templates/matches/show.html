@@ -7,19 +7,31 @@
 
 <div class="card mb-4">
   <div class="card-body text-center">
-    <p class="text-muted mb-1">{{ match.datetime|date:"d/m/Y H:i" }}</p>
-    <h2 class="mb-3">{{ match.home_team }} vs {{ match.away_team }}</h2>
-
-    {% if match.home_score is not None and match.away_score is not None %}
-    <h1 class="display-4 fw-bold">{{ match.home_score }} – {{ match.away_score }}</h1>
-    {% if match.penalty_home_score is not None %}
-    <p class="text-muted">({{ match.penalty_home_score }} – {{ match.penalty_away_score }} on penalties)</p>
-    {% endif %}
-    {% else %}
-    <h1 class="display-4 fw-bold text-muted">– vs –</h1>
-    {% endif %}
+    <p class="text-muted mb-3">{{ match.datetime|date:"d/m/Y H:i" }}</p>
+    <div class="d-flex align-items-center justify-content-center gap-4">
+      <div class="text-end" style="flex:1">
+        <div>{% if match.home_team.logo %}<img src="{{ match.home_team.logo.url }}" alt="{{ match.home_team }}" height="64">{% else %}<img src="/media/team_logos/default.png" alt="{{ match.home_team }}" height="64">{% endif %}</div>
+        <div class="fw-semibold mt-1">{{ match.home_team }}</div>
+      </div>
+      <div class="text-center" style="flex:0 0 auto">
+        {% if match.home_score is not None and match.away_score is not None %}
+        <h1 class="display-4 fw-bold mb-0">{{ match.home_score }} – {{ match.away_score }}</h1>
+        {% if match.penalty_home_score is not None %}
+        <p class="text-muted mb-0">({{ match.penalty_home_score }} – {{ match.penalty_away_score }} pens)</p>
+        {% endif %}
+        {% else %}
+        <h1 class="display-4 fw-bold text-muted mb-0">vs</h1>
+        {% endif %}
+      </div>
+      <div class="text-start" style="flex:1">
+        <div>{% if match.away_team.logo %}<img src="{{ match.away_team.logo.url }}" alt="{{ match.away_team }}" height="64">{% else %}<img src="/media/team_logos/default.png" alt="{{ match.away_team }}" height="64">{% endif %}</div>
+        <div class="fw-semibold mt-1">{{ match.away_team }}</div>
+      </div>
+    </div>
+    <div class="mt-3">
 
     <span class="badge bg-secondary fs-6">{{ match.get_status_display }}</span>
+    </div>
   </div>
 </div>
 

@@ -12,6 +12,8 @@ wheels/
 # Django
 db.sqlite3
 
+media/
+
 # IDE
 .idea/
 .vscode/

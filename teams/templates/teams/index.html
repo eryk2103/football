@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Teams{% endblock %}
+{% block content %}
+<h1 class="my-4">Teams</h1>
+{% if teams %}
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>Name</th>
+      <th>Country</th>
+      <th>City</th>
+      <th>Stadium</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for team in teams %}
+    <tr>
+      <td>{{ team.name }}</td>
+      <td>{% if team.country %}{{ team.country }}{% else %}–{% endif %}</td>
+      <td>{% if team.city %}{{ team.city }}{% else %}–{% endif %}</td>
+      <td>{% if team.stadium %}{{ team.stadium }}{% else %}–{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="text-muted">No teams found.</p>
+{% endif %}
+{% endblock %}

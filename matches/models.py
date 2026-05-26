@@ -18,7 +18,7 @@ class Match(models.Model):
     penalty_away_score = models.PositiveIntegerField(null=True, blank=True)
     competition = models.ForeignKey('competitions.CompetitionPhase', on_delete=models.SET_NULL, null=True, blank=True)
     stadium = models.ForeignKey('stadiums.Stadium', on_delete=models.SET_NULL, null=True, blank=True)
-    date = models.DateField()
+    datetime = models.DateTimeField()
     status = models.CharField(max_length=20, choices=Status)
     leg = models.PositiveSmallIntegerField(null=True, blank=True) # 1 or 2
     created_at = models.DateTimeField(auto_now_add=True)

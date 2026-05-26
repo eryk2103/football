@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{{ match.home_team }} vs {{ match.away_team }}{% endblock %}
+{% block content %}
+<div class="my-4">
+  <a href="{% url 'matches_index' %}" class="text-decoration-none">&larr; Back to matches</a>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body text-center">
+    <p class="text-muted mb-1">{{ match.datetime|date:"d/m/Y H:i" }}</p>
+    <h2 class="mb-3">{{ match.home_team }} vs {{ match.away_team }}</h2>
+
+    {% if match.home_score is not None and match.away_score is not None %}
+    <h1 class="display-4 fw-bold">{{ match.home_score }} – {{ match.away_score }}</h1>
+    {% if match.penalty_home_score is not None %}
+    <p class="text-muted">({{ match.penalty_home_score }} – {{ match.penalty_away_score }} on penalties)</p>
+    {% endif %}
+    {% else %}
+    <h1 class="display-4 fw-bold text-muted">– vs –</h1>
+    {% endif %}
+
+    <span class="badge bg-secondary fs-6">{{ match.get_status_display }}</span>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">Competition</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between">
+          <span class="text-muted">Competition</span>
+          <span>{{ match.competition.competition }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+          <span class="text-muted">Phase</span>
+          <span>{{ match.competition.display_name }}</span>
+        </li>
+        {% if match.leg %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span class="text-muted">Leg</span>
+          <span>{{ match.leg }}</span>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">Venue</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between">
+          <span class="text-muted">Stadium</span>
+          <span>{% if match.stadium %}{{ match.stadium }}{% else %}–{% endif %}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -34,3 +34,12 @@ class CompetitionPhase(models.Model):
 
     def __str__(self):
         return f"{self.competition} - {self.type} - {self.name}"
+
+    def display_name(self):
+        if self.type == self.Type.GROUP_STAGE:
+            return f"group {self.name}"
+        elif self.type == self.Type.KNOCKOUT_STAGE:
+            return self.name
+        elif self.type == self.Type.LEAGUE_STAGE:
+            return f"matchweek {self.name}"
+        return self.name

@@ -3,14 +3,15 @@
 {% block content %}
 <h1 class="my-4">Teams</h1>
 {% if teams %}
+<div class="table-responsive">
 <table class="table table-striped align-middle">
   <thead class="table-dark">
     <tr>
       <th></th>
       <th>Name</th>
-      <th>Country</th>
-      <th>City</th>
-      <th>Stadium</th>
+      <th class="d-none d-sm-table-cell">Country</th>
+      <th class="d-none d-md-table-cell">City</th>
+      <th class="d-none d-md-table-cell">Stadium</th>
     </tr>
   </thead>
   <tbody>
@@ -24,13 +25,14 @@
         {% endif %}
       </td>
       <td>{{ team.name }}</td>
-      <td>{% if team.country %}{{ team.country }}{% else %}–{% endif %}</td>
-      <td>{% if team.city %}{{ team.city }}{% else %}–{% endif %}</td>
-      <td>{% if team.stadium %}{{ team.stadium }}{% else %}–{% endif %}</td>
+      <td class="d-none d-sm-table-cell">{% if team.country %}{{ team.country }}{% else %}–{% endif %}</td>
+      <td class="d-none d-md-table-cell">{% if team.city %}{{ team.city }}{% else %}–{% endif %}</td>
+      <td class="d-none d-md-table-cell">{% if team.stadium %}{{ team.stadium }}{% else %}–{% endif %}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+</div>
 {% else %}
 <p class="text-muted">No teams found.</p>
 {% endif %}

@@ -31,6 +31,7 @@ class CompetitionPhase(models.Model):
     competition = models.ForeignKey('competitions.Competition', on_delete=models.CASCADE)
     type = models.CharField(max_length=20, choices=Type)
     name = models.CharField(max_length=100)
+    order = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return f"{self.competition} - {self.type} - {self.name}"

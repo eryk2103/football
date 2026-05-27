@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Standings{% endblock %}
+{% block content %}
+<h1 class="my-4">Standings</h1>
+
+<form method="get" class="row g-2 mb-4">
+  <div class="col-12 col-sm-auto">
+    <select name="competition" class="form-select" onchange="this.form.submit()">
+      <option value="">Select competition</option>
+      {% for c in competitions %}
+      <option value="{{ c.pk }}" {% if selected_competition == c.pk|stringformat:"s" %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% if selected_competition %}
+  <div class="col-12 col-sm-auto">
+    <a href="?" class="btn btn-outline-secondary">Clear</a>
+  </div>
+  {% endif %}
+</form>
+
+{% if competition %}
+
+  {% if standings %}
+  <h4 class="mb-3">League Table</h4>
+  <div class="table-responsive mb-5">
+  <table class="table table-striped align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th colspan="2">Team</th>
+        <th class="text-center">P</th>
+        <th class="text-center">W</th>
+        <th class="text-center d-none d-sm-table-cell">D</th>
+        <th class="text-center d-none d-sm-table-cell">L</th>
+        <th class="text-center d-none d-md-table-cell">GF</th>
+        <th class="text-center d-none d-md-table-cell">GA</th>
+        <th class="text-center d-none d-sm-table-cell">GD</th>
+        <th class="text-center">Pts</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in standings %}
+      <tr>
+        <td>{{ row.position }}</td>
+        <td style="width:36px">
+          {% if row.team.logo %}
+            <img src="{{ row.team.logo.url }}" alt="{{ row.team }}" height="24">
+          {% else %}
+            <img src="/media/team_logos/default.png" alt="{{ row.team }}" height="24">
+          {% endif %}
+        </td>
+        <td>
+          <span class="d-none d-sm-inline">{{ row.team.name }}</span>
+          <span class="d-sm-none">{{ row.team.short_name }}</span>
+        </td>
+        <td class="text-center">{{ row.played }}</td>
+        <td class="text-center">{{ row.won }}</td>
+        <td class="text-center d-none d-sm-table-cell">{{ row.drawn }}</td>
+        <td class="text-center d-none d-sm-table-cell">{{ row.lost }}</td>
+        <td class="text-center d-none d-md-table-cell">{{ row.goals_for }}</td>
+        <td class="text-center d-none d-md-table-cell">{{ row.goals_against }}</td>
+        <td class="text-center d-none d-sm-table-cell">{{ row.goal_difference }}</td>
+        <td class="text-center fw-bold">{{ row.points }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+
+  {% if knockout_phases %}
+  <h4 class="mb-3">Knockout Rounds</h4>
+  {% for phase in knockout_phases %}
+  <h6 class="text-muted mt-4 mb-2">{{ phase.name }}</h6>
+  <div class="table-responsive mb-3">
+  <table class="table table-striped align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th class="text-end">Home</th>
+        <th class="text-center">Score</th>
+        <th>Away</th>
+        <th class="d-none d-sm-table-cell text-nowrap">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for match in phase.match_set.all %}
+      <tr style="cursor:pointer" onclick="window.location='{% url 'matches_show' match.pk %}'">
+        <td class="text-end">
+          <span class="d-none d-sm-inline">{{ match.home_team }}</span>
+          <span class="d-sm-none">{{ match.home_team.short_name }}</span>
+          {% if match.home_team.logo %}
+            <img src="{{ match.home_team.logo.url }}" alt="{{ match.home_team }}" height="24">
+          {% else %}
+            <img src="/media/team_logos/default.png" alt="{{ match.home_team }}" height="24">
+          {% endif %}
+        </td>
+        <td class="text-center">
+          {% if match.home_score is not None and match.away_score is not None %}
+            {{ match.home_score }} – {{ match.away_score }}
+            {% if match.penalty_home_score is not None %}
+            <br><small class="text-muted">({{ match.penalty_home_score }}–{{ match.penalty_away_score }} pens)</small>
+            {% endif %}
+          {% else %}
+            –
+          {% endif %}
+        </td>
+        <td>
+          {% if match.away_team.logo %}
+            <img src="{{ match.away_team.logo.url }}" alt="{{ match.away_team }}" height="24">
+          {% else %}
+            <img src="/media/team_logos/default.png" alt="{{ match.away_team }}" height="24">
+          {% endif %}
+          <span class="d-none d-sm-inline">{{ match.away_team }}</span>
+          <span class="d-sm-none">{{ match.away_team.short_name }}</span>
+        </td>
+        <td class="d-none d-sm-table-cell text-nowrap">{{ match.datetime|date:"d/m/Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="text-muted">No matches yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  {% if not standings and not knockout_phases %}
+  <p class="text-muted">No data available for this competition.</p>
+  {% endif %}
+
+{% endif %}
+{% endblock %}

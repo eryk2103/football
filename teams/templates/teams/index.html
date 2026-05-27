@@ -2,6 +2,23 @@
 {% block title %}Teams{% endblock %}
 {% block content %}
 <h1 class="my-4">Teams</h1>
+
+<form method="get" class="row g-2 mb-4">
+  <div class="col-12 col-sm-auto">
+    <select name="competition" class="form-select" onchange="this.form.submit()">
+      <option value="">All competitions</option>
+      {% for competition in competitions %}
+      <option value="{{ competition.pk }}" {% if selected_competition == competition.pk|stringformat:"s" %}selected{% endif %}>{{ competition }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% if selected_competition %}
+  <div class="col-12 col-sm-auto">
+    <a href="?" class="btn btn-outline-secondary">Clear</a>
+  </div>
+  {% endif %}
+</form>
+
 {% if teams %}
 <div class="table-responsive">
 <table class="table table-striped align-middle">

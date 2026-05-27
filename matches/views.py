@@ -10,9 +10,11 @@ def index(request):
 
     competition_id = request.GET.get('competition')
     phase_id = request.GET.get('phase')
+    order = request.GET.get('order', 'asc')
 
+    date_order = 'datetime' if order == 'asc' else '-datetime'
     matches = Match.objects.select_related('home_team', 'away_team', 'competition', 'competition__competition',
-                                           'stadium').order_by('datetime').order_by('competition')
+                                           'stadium').order_by(date_order)
 
     if competition_id:
         matches = matches.filter(competition__competition_id=competition_id)
@@ -31,6 +33,7 @@ def index(request):
         'phases': phases,
         'selected_competition': competition_id,
         'selected_phase': phase_id,
+        'order': order,
     })
 
 
